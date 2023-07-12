@@ -32,7 +32,8 @@
                 <p>当店の商品について質問やご意見については
                     下記フォームよりお問い合わせください。<br>
                     また、任意ですがアンケート内容にも協力お願い致します。</p>
-                <form name="form1" method="get" action="">
+                <form name="form1" method="get" action="https://api.staticforms.xyz/submit" method="post">
+                    <input type="hidden" name="accessKey" value="7fd59f50-8c05-411a-b5f0-5ef5d1527225">
                     <table>
                         <tr>
                             <th>氏名（必須）</th>
@@ -82,7 +83,7 @@
                         </tr>
                         <tr>    
                             <td colspan="2" id="submit">
-                                <input type="submit" value="送信">　
+                                <input type="submit" value="送信">
                                 <input type="reset" value="取り消し">
                             </td>
                         </tr>
