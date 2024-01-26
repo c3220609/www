@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドラクエもどき</title>
+    <style>
+        body{
+            background-color: black;
+        }
+        p{
+            color: white;
+            font-size: 40px;
+            text-align: center;
+        }
+        .bossname {
+            width: 400px;
+        }
+        .headder{
+            display: flex;
+        }
+        .HPber{
+            width: 400px;
+            height: 200px;
+            margin-left: 310px;
+        }
+        .box{
+            border:white 10px double; /*境界線の指定*/
+            padding:10px;
+            width: 200px;
+        }
+        .box2{
+            display: flex;
+            border:white 10px double; /*境界線の指定*/
+            padding:10px;
+            width: 1000px;
+            height:230px;
+        }
+        .boss{
+            width: 1000px;
+            text-align: center;
+            height: 400px;
+        }
+        .btn {
+            font-size:35px;
+            background-color: black;
+            color: white;
+            margin-left: 10px;
+        }
+        .btnboxclass{
+            width: auto;
+            height: 210px;
+        }
+        .textboxclass{
+            margin-top: 10px;
+            width: 1000px;
+            height: 230px;
+        }
+    </style>
+</head>
+<body  onmousedown="onmousedownEvent()">
+    <div class ="headder">
+        <div class="bossname">
+            <p class = "box">ゾーマ</p>
+        </div>
+        <div class ="HPber" id ="HPber">
+        </div>
+    </div>
+   <div id = "boss" class = "boss">
+    <img src="boss.png">
+   </div>
+   <div class = "box2">
+        <div id = "btnbox" class = "btnboxclass">
+        <button id = "btn1" class="btn" onclick="tatakau()">たたかう</button><br>
+        <button id = "btn2" class="btn" onclick="mahou()">まほう</button><br>
+        <button id = "btn3" class="btn" onclick="mamoru()">まもる</button><br>
+        <button id = "btn4" class="btn" onclick="nigeru()">にげる</button>
+        </div>
+        <div id = "textbox2" class ="textboxclass">
+        </div>
+   </div>
+   <script>
+    let bossAttack = 0;//ボスの攻撃ダメージ値
+    let bossHP = 1000; //ボスの体力
+    let bossDedFlag = 0;//ボスが死亡フラグ（0=生存,1=死亡）
+    let PlayerHP = 1000;//プレイヤーの体力
+    let PlayerAttackFlag = 0;//プレイヤーが攻撃したかのフラグ
+    let PlayerMamoruFlag = 0;//プレイヤーが守っているかのフラグ
+    let PlayerDedFlag = 0;//プレイヤー死亡フラグ（0=生存,1=死亡）
+    var result = 0;//ランダム数保管用（プレイヤー魔法攻撃,ボス攻撃方法選択時使用）
+    var At = 0;//ランダム数保管用（ボス攻撃時のみ使用）
+    let switchBtnbox = document.getElementById('btnbox');//ボタンのID取得
+    let switchTextbox = document.getElementById('textbox2');//テキストボックスのID取得
+    let switchHPbox = document.getElementById('HPber');//右上HPボックスのID取得
+    switchTextbox.style.display = 'none';//初期はテキストボックス非表示
+    switchHPbox.innerHTML = '<p>勇者:' + PlayerHP + '</p>' +//初期のHP表示
+                                '<p>ゾーマ:' + bossHP + '</p>';
+
+    function HPchange() { //場面変更時のHP変更用関数
+        switchHPbox.innerHTML = '<p>勇者:' + PlayerHP + '</p>' +
+                                '<p>ゾーマ:' + bossHP + '</p>';
+    }
+    function tatakau() {//「たたかう」を押したとき
+         bossHP -= 100;
+        switchBtnbox.style.display = 'none';
+        switchTextbox.style.display = '';
+            switchTextbox.innerHTML = '<p>ゾーマは100のダメージを受けた！</p>';
+            HPchange();
+            PlayerAttackFlag = 1;
+        if(bossHP <= 0) {
+            bossDedFlag = 1;
+        }
+        }
+
+    function getRandom(min,max) {//ランダム関数
+        var random = Math.floor(Math.random() * (max + 1 - min)) + min;
+        return random;
+    }
+    function mahou() {//「まほう」を押したとき
+        result = getRandom(50,350);
+        bossHP -= result;
+        switchBtnbox.style.display = 'none';
+        switchTextbox.style.display = '';
+        switchTextbox.innerHTML = '<p>ゾーマは魔法で' + result + 'のダメージを受けた！</p>';
+        PlayerAttackFlag = 1;
+        HPchange();
+        if(bossHP <= 0) {
+            bossDedFlag = 1;
+        }
+    }
+    function mamoru() {//「まもる」を押したとき
+        
+        switchBtnbox.style.display = 'none';
+        switchTextbox.style.display = '';
+        switchTextbox.innerHTML = '<p>まもる！次の攻撃を無効化するぞ！</p>';
+        PlayerAttackFlag = 1;
+        PlayerMamoruFlag = 1;
+        HPchange();
+    }
+    function nigeru() {//「にげる」を押したとき
+        switchBtnbox.style.display = 'none';
+        switchTextbox.style.display = '';
+        switchTextbox.innerHTML = '<p>ボス戦以外のプログラムをしていないため、逃げられないぞ！！でもなんか回復した！</p>';
+        PlayerHP += 150;
+        PlayerAttackFlag = 1;
+        HPchange();
+    }
+    function onmousedownEvent () {//ボタンを押した後のマウスクリック時
+            if(PlayerDedFlag == 1){
+            switchTextbox.innerHTML ='<p>勇者のHPが0になった。</p>';
+            document.getElementById('boss').innerHTML = '<p>ゲームオーバー...</p>';
+        }else{
+            if(bossDedFlag == 1){
+            switchTextbox.innerHTML ='<p>ゾーマのHPが0になった。</p>';
+            document.getElementById('boss').innerHTML = '<p>ゲームクリア！！</p>';//ボス撃破後クリック時テキストに変換
+        }else{
+            if(PlayerAttackFlag == 1){
+                result = getRandom(1,4);
+                switch(result){
+                    case 1: //ボス弱攻撃
+                        PlayerAttackFlag = 0;
+                        if(PlayerMamoruFlag == 1){
+                            PlayerMamoruFlag = 0;
+                            switchTextbox.innerHTML = '<p>ゾーマがただ殴ってきたが、</p>'+
+                                                      '<p>痛くもかゆくもない！</p>';
+                        }else{
+                            PlayerHP -= 150;
+                            switchTextbox.innerHTML = '<p>ゾーマがただ殴ってきた！</p>'+
+                                                      '<p>勇者は150のダメージを受けた！</p>';
+                        }
+                        if(PlayerHP <= 0) {
+                            PlayerDedFlag = 1;
+                            
+                        }
+                        HPchange();
+                        break;
+                    case 2: //ボス魔法攻撃
+                        At = getRandom(130,200);
+                        
+                        PlayerAttackFlag = 0;
+                        
+                        if(PlayerMamoruFlag == 1){
+                            PlayerMamoruFlag = 0;
+                            switchTextbox.innerHTML = '<p>ゾーマが魔法を使ってきたが、</p>'+
+                                                      '<p>勇者は守っていた！0ダメージ！</p>';
+                        }else{
+                            PlayerHP -= At;
+                            switchTextbox.innerHTML = '<p>ゾーマが魔法を使ってきた！</p>'+
+                                                      '<p>勇者は'+ At +'のダメージを受けた！</p>';
+                        }
+                        if(PlayerHP <= 0) {
+                            PlayerDedFlag = 1;
+                        }
+                        HPchange();
+                        break;
+                    case 3: //ボス回復
+                        switchTextbox.innerHTML = '<p>ゾーマは寝ている...ゾーマは150回復した！</p>';
+                        PlayerAttackFlag = 0;
+                        PlayerMamoruFlag = 0;
+                        bossHP += 150;
+                        HPchange();
+                        break;
+                    case 4: //ボス必殺技
+                        
+                        PlayerAttackFlag = 0;
+                        if(PlayerMamoruFlag == 1){
+                            PlayerMamoruFlag = 0;
+                            switchTextbox.innerHTML = '<p>ゾーマが必殺技を放った！</p>'+
+                                                      '<p>がしかし！勇者に受け止められた！</p>';
+                        }else{
+                            PlayerHP -= 300;
+                            switchTextbox.innerHTML = '<p>ゾーマが必殺技を放った！</p>'+
+                                                      '<p>勇者は300のダメージを受けた！</p>';
+                        }
+                        if(PlayerHP <= 0) {
+                        PlayerDedFlag = 1;
+                        }
+                        HPchange();
+                        break;
+                }
+            }else{
+            if(switchBtnbox.style.display = 'none'){//クリック時ボタン、テキストの表示切替
+                switchTextbox.style.display = 'none';
+                switchBtnbox.style.display = '';   
+            }else{
+                switchBtnbox.style.display = 'none';
+            }
+            }
+        
+    }
+}
+}
+   </script>
+</body>
+</html>
