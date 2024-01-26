@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドラクエ</title>
+    <style>
+        body{
+            background-color: black;
+        }
+        p{
+            color: white;
+            font-size: 45px;
+            text-align: center;
+        }
+        .box{
+            border:white 10px double; /*境界線の指定*/
+            padding:10px;
+            width: 200px;
+        }
+        .box2{
+            border:white 10px double; /*境界線の指定*/
+            padding:10px;
+            width: 1050px;
+            height:210px;
+        }
+        .boss{
+            margin-left: 250px;
+            width: 600px;
+            height: 600px;
+        }
+        .btn {
+            font-size: 30px;
+            background-color: black;
+            color: white;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body  onmousedown="onmousedownEvent()">
+   <p class = "box">ゾーマ</p>
+   <div class = "boss">
+    <img src="boss.png">
+   </div>
+   <div id = "textbox2" class = "box2">
+        <div id = "btnbox">
+        <button id = "btn1" class="btn" onclick="tatakau()">たたかう</button><br>
+        <button id = "btn2" class="btn" onclick="mahou()">まほう</button><br>
+        <button id = "btn3" class="btn" onclick="mamoru()">まもる</button><br>
+        <button id = "btn4" class="btn" onclick="nigeru()">にげる</button>
+        </div>
+   </div>
+   <script>
+    let flag = 0;
+    function tatakau() {
+        document.getElementById("btnbox").style.display = "none";
+        document.getElementById("textbox2").innerHTML = '<p id ="text">ゾーマは100のダメージを受けた！</p>';
+    }
+    function mahou() {
+        document.getElementById("btnbox").style.display = "none";
+    }
+    function mamoru() {
+        document.getElementById("btnbox").style.display = "none";
+    }
+    function nigeru() {
+        document.getElementById("btnbox").style.display = "none";
+    }
+    function onmousedownEvent () {
+        flag++;
+        if(flag >= 2) {
+        document.getElementById("text").style.display = "none";
+        document.getElementById("btnbox").style.display: block;
+        }
+        
+    }
+   </script>
+</body>
+</html>
